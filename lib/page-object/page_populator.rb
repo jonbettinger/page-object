@@ -31,9 +31,9 @@ module PageObject
     #
     def populate_page_with(data)
       data.each do |key, value|
-        populate_checkbox(key, value) if is_checkbox?(key) and is_enabled?(key)
-        populate_radiobutton(key, value) if is_radiobutton?(key) and is_enabled?(key)
-        populate_text(key, value) if is_text?(key) and is_enabled?(key)
+        populate_checkbox(key, value) if is_checkbox?(key) and is_editable?(key)
+        populate_radiobutton(key, value) if is_radiobutton?(key) and is_editable?(key)
+        populate_text(key, value) if is_text?(key) and is_editable?(key)
       end
     end
 
@@ -65,8 +65,9 @@ module PageObject
       respond_to?("select_#{key}".to_sym)
     end
 
-    def is_enabled?(key)
-      self.send("#{key}_element").enabled?
+    def is_editable?(key)
+      element = self.send("#{key}_element")
+      element.exists? && element.enabled?
     end
   end
 end
